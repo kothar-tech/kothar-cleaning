@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Kothar Cleaning Services: site architecture",
+    "output": "docs/architecture.html",
+    "quality_profile": "showcase",
+    "legend": {
+      "mode": "all",
+      "entries": {
+        "frontend": { "label": "Client (hydrated)" },
+        "backend": { "label": "Server code" },
+        "database": { "label": "Content file" },
+        "cloud": { "label": "Shared UI kit" },
+        "security": { "label": "Logic (lib/)" },
+        "messagebus": { "label": "Reel pipeline" },
+        "external": { "label": "Outside site" }
+      }
+    }
+  },
+  "components": [
+    { "id": "site", "type": "database", "label": "content/site.ts", "sublabel": "services, steps, FAQ", "tag": "REAL", "pos": [30, 160], "size": [170, 64] },
+    { "id": "visitor", "type": "external", "label": "Visitor", "sublabel": "phone or desktop", "pos": [30, 290], "size": [170, 64] },
+    { "id": "hf", "type": "messagebus", "label": "video/ project", "sublabel": "HyperFrames, 3 scenes", "pos": [30, 550], "size": [170, 64] },
+
+    { "id": "server", "type": "backend", "label": "Server sections", "sublabel": "Hero, Services, Products", "tag": "SERVER", "pos": [310, 160], "size": [170, 64] },
+    { "id": "page", "type": "backend", "label": "page.tsx + layout", "sublabel": "composes 13 sections", "tag": "STATIC", "pos": [310, 290], "size": [170, 64] },
+    { "id": "islands", "type": "frontend", "label": "Client islands", "sublabel": "Header, Process, FAQ", "tag": "CLIENT", "pos": [310, 420], "size": [170, 64] },
+    { "id": "mp4", "type": "messagebus", "label": "public/video", "sublabel": "reel.mp4 788 KB + poster", "pos": [310, 550], "size": [170, 64] },
+
+    { "id": "placeholders", "type": "database", "label": "placeholders.ts", "sublabel": "sample rates and stats", "tag": "FLAGGED", "pos": [590, 30], "size": [170, 64] },
+    { "id": "pricing", "type": "security", "label": "lib/pricing.ts", "sublabel": "pure estimate()", "pos": [590, 160], "size": [170, 64] },
+    { "id": "estimator", "type": "frontend", "label": "QuoteEstimator", "sublabel": "live price range", "tag": "CLIENT", "pos": [590, 290], "size": [170, 64] },
+    { "id": "prims", "type": "cloud", "label": "UI + graphics kit", "sublabel": "Button, Reveal, Sparkle", "pos": [590, 420], "size": [170, 64] },
+    { "id": "band", "type": "frontend", "label": "BrandReelBand", "sublabel": "plays only on screen", "tag": "CLIENT", "pos": [590, 550], "size": [170, 64] },
+
+    { "id": "validation", "type": "security", "label": "lib/validation.ts", "sublabel": "zod, shared schema", "pos": [870, 160], "size": [170, 64] },
+    { "id": "contact", "type": "frontend", "label": "Contact form", "sublabel": "validates on blur", "tag": "CLIENT", "pos": [870, 290], "size": [170, 64] },
+    { "id": "mailto", "type": "external", "label": "mailto fallback", "sublabel": "pre-filled email draft", "pos": [870, 420], "size": [170, 64] },
+
+    { "id": "api", "type": "backend", "label": "/api/quote", "sublabel": "honeypot + rate limit", "tag": "SERVER", "pos": [1150, 290], "size": [170, 64] },
+    { "id": "resend", "type": "external", "label": "Resend email", "sublabel": "when API key is set", "pos": [1150, 420], "size": [170, 64] }
+  ],
+  "connections": [
+    { "id": "visitor-to-page", "from": "visitor", "to": "page", "label": "request /", "variant": "emphasis" },
+    { "id": "page-to-server", "from": "page", "to": "server", "label": "prerender" },
+    { "id": "site-to-server", "from": "site", "to": "server", "label": "facts" },
+    { "id": "page-to-islands", "from": "page", "to": "islands", "label": "hydrate" },
+    { "id": "page-to-estimator", "from": "page", "to": "estimator", "label": "mounts" },
+    { "id": "prims-to-islands", "from": "prims", "to": "islands", "label": "UI kit" },
+    { "id": "prims-to-estimator", "from": "prims", "to": "estimator", "label": "UI kit" },
+    { "id": "placeholders-to-pricing", "from": "placeholders", "to": "pricing", "label": "sample rates", "variant": "dashed" },
+    { "id": "pricing-to-estimator", "from": "pricing", "to": "estimator", "label": "estimate()" },
+    { "id": "estimator-to-contact", "from": "estimator", "to": "contact", "label": "prefill event", "variant": "emphasis" },
+    { "id": "validation-to-contact", "from": "validation", "to": "contact", "label": "validate", "variant": "security" },
+    { "id": "validation-to-api", "from": "validation", "to": "api", "label": "same schema", "variant": "security", "fromSide": "right", "toSide": "top" },
+    { "id": "contact-to-api", "from": "contact", "to": "api", "label": "POST JSON", "variant": "emphasis" },
+    { "id": "api-to-resend", "from": "api", "to": "resend", "label": "send" },
+    { "id": "contact-to-mailto", "from": "contact", "to": "mailto", "label": "on failure", "variant": "dashed" },
+    { "id": "hf-to-mp4", "from": "hf", "to": "mp4", "label": "render" },
+    { "id": "mp4-to-band", "from": "mp4", "to": "band", "label": "plays" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Page order",
+      "items": [
+        "Hero, StatsBar, Services, AdditionalServices",
+        "QuoteEstimator, Process, Products, WhyKothar",
+        "BrandReelBand, Testimonials, GetAQuote, Faq, Contact",
+        "Header, UtilityBar, Footer and StickyBookBar wrap the page in layout.tsx"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Quote flow",
+      "items": [
+        "Service cards fire kothar:select-service to preselect the estimator",
+        "Request this quote fires kothar:quote-prefill, which fills the form",
+        "In development the API logs the request instead of emailing it",
+        "In production without a key it answers 503 and the form offers a mailto draft"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Content honesty",
+      "items": [
+        "site.ts holds only facts from the brochure",
+        "placeholders.ts holds every invented number, review and rate",
+        "npm run build lists outstanding TODO(client) items",
+        "STRICT_PLACEHOLDERS=1 fails the build until they are real"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Reel pipeline",
+      "items": [
+        "10 s loop rendered at 1080p by HyperFrames, compressed to 720p with ffmpeg",
+        "Starts and ends on brand blue so the loop has no seam",
+        "Pauses off screen, stays on its poster under reduced motion, has a pause button"
+      ]
+    }
+  ]
+}

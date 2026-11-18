@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "19321c79-95f1-4aa3-8a23-4496326a08a0",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/Users/divash/Projects/kothar-cleaning-website/docs/architecture.json",
+  "output": "/Users/divash/Projects/kothar-cleaning-website/docs/architecture.html",
+  "specification": {
+    "sha256": "fd4b09c0a92a737d9c375b5ba02b5c862aa94dd364502ebe45a25ef680c9cac3",
+    "bytes": 6454
+  },
+  "artifact": {
+    "sha256": "6747504beb0c2f6439df24b8d66a6eca45a28179e0dbbca9d1e42889b59a5c9d",
+    "bytes": 782605
+  }
+}

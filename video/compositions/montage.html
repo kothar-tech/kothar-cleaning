@@ -1,0 +1,105 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Montserrat", sans-serif;
+    }
+    .montage-tile {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #0b2f55;
+    }
+    .montage-img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      object-fit: cover;
+    }
+    .montage-shade {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 29, 56, 0.72) 0%, rgba(7, 29, 56, 0) 42%);
+    }
+    .montage-label {
+      position: absolute;
+      left: 130px;
+      bottom: 130px;
+    }
+    .montage-chip {
+      display: inline-block;
+      padding: 22px 56px 24px;
+      border-radius: 999px;
+      background: #f37b0b;
+      color: #0b2f55;
+      font-weight: 800;
+      font-size: 92px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+  </style>
+
+  <div id="root" data-composition-id="montage" data-width="1920" data-height="1080">
+    <div id="montage-office" class="clip montage-tile" data-start="0" data-duration="1.7">
+      <img id="montage-office-img" class="montage-img" src="assets/office-vacuum.jpg" alt="" style="object-position: 50% 42%" />
+      <div class="montage-shade"></div>
+      <div class="montage-label"><span id="montage-office-chip" class="montage-chip">Office cleaning</span></div>
+    </div>
+
+    <div id="montage-glass" class="clip montage-tile" data-start="1.4" data-duration="1.7">
+      <img id="montage-glass-img" class="montage-img" src="assets/glass-squeegee.jpg" alt="" style="object-position: 50% 74%" />
+      <div class="montage-shade"></div>
+      <div class="montage-label"><span id="montage-glass-chip" class="montage-chip">Glass cleaning</span></div>
+    </div>
+
+    <div id="montage-carpet" class="clip montage-tile" data-start="2.8" data-duration="1.7">
+      <img id="montage-carpet-img" class="montage-img" src="assets/carpet-extraction.jpg" alt="" style="object-position: 50% 38%" />
+      <div class="montage-shade"></div>
+      <div class="montage-label"><span id="montage-carpet-chip" class="montage-chip">Carpet cleaning</span></div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // Seam recipe (LEFT current): exit = power4.in to -12% with blur, entry = power4.out from +12%, same 0.3 s
+    const SEAM = 0.3;
+    const leave = (id, at) =>
+      tl.to(id, { xPercent: -12, opacity: 0, filter: "blur(18px)", duration: SEAM, ease: "power4.in" }, at);
+    const arrive = (id, at) =>
+      tl.fromTo(
+        id,
+        { xPercent: 12, opacity: 0, filter: "blur(18px)" },
+        { xPercent: 0, opacity: 1, filter: "blur(0px)", duration: SEAM, ease: "power4.out" },
+        at,
+      );
+
+    // The first tile arrives as the wipe scene leaves (local 0); the last leaves as the end card arrives (local 4.2)
+    arrive("#montage-office", 0);
+    leave("#montage-office", 1.4);
+    arrive("#montage-glass", 1.4);
+    leave("#montage-glass", 2.8);
+    arrive("#montage-carpet", 2.8);
+    leave("#montage-carpet", 4.2);
+
+    // Slow push forward through each photo while it is on screen
+    tl.fromTo("#montage-office-img", { scale: 1.0 }, { scale: 1.08, duration: 1.7, ease: "none" }, 0);
+    tl.fromTo("#montage-glass-img", { scale: 1.0 }, { scale: 1.08, duration: 1.7, ease: "none" }, 1.4);
+    tl.fromTo("#montage-carpet-img", { scale: 1.0 }, { scale: 1.08, duration: 1.7, ease: "none" }, 2.8);
+
+    // Labels: waterfall entry shortly after each tile settles
+    [
+      ["office", 0.25],
+      ["glass", 1.65],
+      ["carpet", 3.05],
+    ].forEach(([name, at]) => {
+      tl.fromTo(`#montage-${name}-chip`, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.42, ease: "power4.out" }, at);
+    });
+
+    window.__timelines["montage"] = tl;
+  </script>
+</template>

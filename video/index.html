@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      /* Kothar brand: blue #076ebb, orange #f37b0b, navy #0b2f55 (sampled from the logo) */
+      :root {
+        --ground: #076ebb;
+        --ink: #ffffff;
+        --font-display: "Montserrat", sans-serif;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--ground);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: var(--ground);
+        font-family: var(--font-display);
+      }
+      #ground {
+        position: absolute;
+        inset: 0;
+        background: var(--ground);
+      }
+      #wipe {
+        z-index: 1;
+      }
+      #montage {
+        z-index: 2;
+      }
+      #endcard {
+        z-index: 3;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Brand reel, 10 s loop: a swoosh wipes a grimy room clean, three services cut past, the logo lands.
+      Starts and ends on solid brand blue so the loop has no visible seam.
+      Every seam travels LEFT (the film's current) with mirrored power4 eases and a 12% partial travel.
+    -->
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="10"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div
+        id="wipe"
+        data-composition-id="wipe"
+        data-composition-src="compositions/wipe.html"
+        data-start="0"
+        data-duration="3.7"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <div
+        id="montage"
+        data-composition-id="montage"
+        data-composition-src="compositions/montage.html"
+        data-start="3.4"
+        data-duration="4.5"
+        data-track-index="2"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <div
+        id="endcard"
+        data-composition-id="endcard"
+        data-composition-src="compositions/endcard.html"
+        data-start="7.6"
+        data-duration="2.4"
+        data-track-index="3"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

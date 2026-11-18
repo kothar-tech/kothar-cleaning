@@ -1,0 +1,91 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Montserrat", sans-serif;
+    }
+    #endcard-stage {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #076ebb;
+      background-image: radial-gradient(1100px 620px at 78% -10%, rgba(21, 128, 203, 0.9), transparent 62%);
+    }
+    #endcard-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1000px;
+      height: 720px;
+      border-radius: 72px;
+      background: #ffffff;
+      box-shadow: 0 50px 90px rgba(7, 29, 56, 0.45);
+    }
+    #endcard-logo {
+      display: block;
+      width: 800px;
+      height: auto;
+    }
+    .endcard-sparkle {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+    }
+    .endcard-sparkle svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+  <div id="root" data-composition-id="endcard" data-width="1920" data-height="1080">
+    <div id="endcard-stage" class="clip" data-start="0" data-duration="2.4">
+      <div id="endcard-card">
+        <img id="endcard-logo" src="assets/logo-lockup.png" alt="Kothar Cleaning Services" />
+      </div>
+
+      <div id="endcard-s1" class="endcard-sparkle" style="left: 1450px; top: 120px; width: 110px; height: 110px">
+        <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+      </div>
+      <div id="endcard-s2" class="endcard-sparkle" style="left: 1600px; top: 380px; width: 60px; height: 60px">
+        <svg viewBox="0 0 24 24"><path fill="#f37b0b" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+      </div>
+      <div id="endcard-s3" class="endcard-sparkle" style="left: 300px; top: 800px; width: 70px; height: 70px">
+        <svg viewBox="0 0 24 24"><path fill="#b9dcf3" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // Arrives as the montage leaves: entry from the right, mirrored ease and blur (LEFT current)
+    tl.fromTo(
+      "#endcard-stage",
+      { xPercent: 12, opacity: 0, filter: "blur(18px)" },
+      { xPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "power4.out" },
+      0,
+    );
+
+    // Stillness for a beat, then the logo card lands
+    tl.fromTo("#endcard-card", { scale: 0.9, y: 50 }, { scale: 1, y: 0, duration: 0.65, ease: "back.out(1.5)" }, 0.5);
+
+    // Sparkles ping once as it lands
+    [
+      ["#endcard-s1", 0.85],
+      ["#endcard-s2", 1.0],
+      ["#endcard-s3", 1.12],
+    ].forEach(([id, at]) => {
+      tl.fromTo(id, { scale: 0, rotation: -60 }, { scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.4)" }, at);
+    });
+
+    // Release to the brand-blue ground so the loop restarts on the same frame it began
+    tl.to("#endcard-stage", { opacity: 0, duration: 0.4, ease: "power2.inOut" }, 1.8);
+
+    window.__timelines["endcard"] = tl;
+  </script>
+</template>

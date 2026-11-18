@@ -1,0 +1,162 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Montserrat", sans-serif;
+    }
+    #wipe-stage {
+      position: absolute;
+      inset: 0;
+    }
+    /* --p is the reveal edge as a fraction of the frame width: 1.22 (off right) to -0.22 (off left) */
+    #wipe-zoom {
+      position: absolute;
+      inset: 0;
+      --p: 1.22;
+    }
+    .wipe-img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      object-fit: cover;
+    }
+    #wipe-after {
+      clip-path: inset(0 0 0 calc(var(--p) * 100%));
+    }
+    .wipe-swoosh {
+      position: absolute;
+      left: 0;
+      top: -60px;
+      width: 400px;
+      height: 1200px;
+      transform: translate3d(calc(var(--p) * 1920px - 330px), 0, 0);
+    }
+    #wipe-trail {
+      transform: translate3d(calc(var(--p) * 1920px - 250px), 0, 0);
+    }
+    .wipe-sparkle {
+      position: absolute;
+      width: 84px;
+      height: 84px;
+    }
+    .wipe-sparkle svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    #wipe-copy {
+      position: absolute;
+      left: 150px;
+      bottom: 150px;
+      color: #0b2f55;
+      font-weight: 800;
+      font-size: 168px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    .wipe-word {
+      display: inline-block;
+      margin-right: 0.22em;
+    }
+    #wipe-rule {
+      margin-top: 26px;
+      width: 420px;
+      height: 16px;
+      border-radius: 8px;
+      background: #f37b0b;
+    }
+  </style>
+
+  <div id="root" data-composition-id="wipe" data-width="1920" data-height="1080">
+    <div id="wipe-stage">
+      <div id="wipe-zoom">
+        <img id="wipe-before" class="clip wipe-img" src="assets/hero-room-before.jpg" alt="" data-start="0" data-duration="3.7" />
+        <img id="wipe-after" class="clip wipe-img" src="assets/hero-room.jpg" alt="" data-start="0" data-duration="3.7" />
+
+        <svg id="wipe-trail" class="wipe-swoosh" viewBox="0 0 400 1200" fill="none">
+          <path d="M330 0C250 250 250 950 330 1200C440 950 440 250 330 0Z" fill="#ffffff" fill-opacity="0.55" />
+        </svg>
+        <svg id="wipe-swoosh" class="wipe-swoosh" viewBox="0 0 400 1200" fill="none">
+          <path d="M330 0C70 250 70 950 330 1200C230 950 230 250 330 0Z" fill="#f37b0b" />
+        </svg>
+
+        <div id="wipe-s1" class="wipe-sparkle" style="left: 1560px; top: 170px">
+          <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+        </div>
+        <div id="wipe-s2" class="wipe-sparkle" style="left: 1290px; top: 640px">
+          <svg viewBox="0 0 24 24"><path fill="#f37b0b" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+        </div>
+        <div id="wipe-s3" class="wipe-sparkle" style="left: 1000px; top: 250px">
+          <svg viewBox="0 0 24 24"><path fill="#076ebb" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+        </div>
+        <div id="wipe-s4" class="wipe-sparkle" style="left: 760px; top: 760px">
+          <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+        </div>
+        <div id="wipe-s5" class="wipe-sparkle" style="left: 500px; top: 150px">
+          <svg viewBox="0 0 24 24"><path fill="#f37b0b" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+        </div>
+        <div id="wipe-s6" class="wipe-sparkle" style="left: 250px; top: 420px">
+          <svg viewBox="0 0 24 24"><path fill="#076ebb" d="M12 0c.9 7.4 4.6 11.1 12 12-7.4.9-11.1 4.6-12 12-.9-7.4-4.6-11.1-12-12C7.4 11.1 11.1 7.4 12 0Z" /></svg>
+        </div>
+      </div>
+
+      <div id="wipe-copy" class="clip" data-start="0" data-duration="3.7">
+        <div><span class="wipe-word">Clean</span><span class="wipe-word">spaces.</span></div>
+        <div id="wipe-rule"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    // 1. The grimy room fades up from the brand-blue ground with a slow push forward
+    tl.fromTo("#wipe-before", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" }, 0);
+    tl.fromTo("#wipe-zoom", { scale: 1.1 }, { scale: 1, duration: 3.4, ease: "power1.out", transformOrigin: "50% 50%" }, 0);
+
+    // 2. The swoosh drags the reveal edge across the frame, right to left
+    const WIPE_AT = 0.55;
+    const WIPE_FOR = 1.6;
+    tl.fromTo("#wipe-zoom", { "--p": 1.22 }, { "--p": -0.22, duration: WIPE_FOR, ease: "power2.inOut" }, WIPE_AT);
+
+    // 3. Sparkles pop at the moment the edge passes each one (inverse of the wipe ease)
+    const ease = gsap.parseEase("power2.inOut");
+    const inverse = (target) => {
+      let lo = 0;
+      let hi = 1;
+      for (let i = 0; i < 28; i++) {
+        const mid = (lo + hi) / 2;
+        if (ease(mid) < target) lo = mid;
+        else hi = mid;
+      }
+      return (lo + hi) / 2;
+    };
+    const sparkles = [
+      ["#wipe-s1", 1602],
+      ["#wipe-s2", 1332],
+      ["#wipe-s3", 1042],
+      ["#wipe-s4", 802],
+      ["#wipe-s5", 542],
+      ["#wipe-s6", 292],
+    ];
+    sparkles.forEach(([id, centreX]) => {
+      const progress = (1.22 - centreX / 1920) / 1.44;
+      const at = WIPE_AT + WIPE_FOR * inverse(progress);
+      tl.fromTo(id, { scale: 0, rotation: -60, opacity: 1 }, { scale: 1, rotation: 0, duration: 0.24, ease: "back.out(2.2)" }, at);
+      tl.to(id, { scale: 0, rotation: 50, opacity: 0, duration: 0.32, ease: "power2.in" }, at + 0.5);
+    });
+
+    // 4. Copy lands once the room is clean: waterfall entry, word by word
+    tl.fromTo(".wipe-word", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power4.out", stagger: 0.09 }, 2.0);
+    tl.fromTo("#wipe-rule", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.5, ease: "power4.out" }, 2.25);
+
+    // 5. Exit LEFT, partial travel with blur, mirrored by the next scene's entry
+    tl.to("#wipe-stage", { xPercent: -12, opacity: 0, filter: "blur(18px)", duration: 0.3, ease: "power4.in" }, 3.4);
+
+    window.__timelines["wipe"] = tl;
+  </script>
+</template>
